@@ -1,0 +1,259 @@
+import Checkbox from '@/Components/Checkbox';
+import InputError from '@/Components/InputError';
+import InputLabel from '@/Components/InputLabel';
+import PrimaryButton from '@/Components/PrimaryButton';
+import TextInput from '@/Components/TextInput';
+import { Head, Link, useForm } from '@inertiajs/react';
+import { FormEventHandler } from 'react';
+import { Mail, Lock, LogIn, ShieldCheck, FileSpreadsheet, Search } from 'lucide-react';
+
+export default function Login({
+    status,
+    canResetPassword,
+}: {
+    status?: string;
+    canResetPassword: boolean;
+}) {
+    const { data, setData, post, processing, errors, reset } = useForm({
+        email: '',
+        password: '',
+        remember: false as boolean,
+    });
+
+    const submit: FormEventHandler = (e) => {
+        e.preventDefault();
+
+        post(route('login'), {
+            onFinish: () => reset('password'),
+        });
+    };
+
+    return (
+        <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row dark:bg-gray-950 transition-colors duration-300">
+            <Head title="Log in - SIArsip Piksi" />
+
+            {/* Left Column: Visual branding and welcome panel */}
+            <div className="hidden md:flex md:w-1/2 bg-gradient-to-br from-indigo-900 via-blue-900 to-indigo-950 text-white p-12 flex-col justify-between relative overflow-hidden">
+                {/* Decorative background grid and glowing circles */}
+                <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+                <div className="absolute top-1/4 -left-10 w-72 h-72 bg-blue-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+                <div className="absolute bottom-1/4 -right-10 w-80 h-80 bg-indigo-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+
+                {/* Logo and Brand */}
+                <div className="relative z-10 flex items-center gap-3">
+                    <div className="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl p-1.5 flex items-center justify-center border border-white/20 shadow-xl">
+                        <img 
+                            src="/images/logo-piksi.png" 
+                            alt="Logo Politeknik Piksi Input Serang" 
+                            className="w-full h-full object-contain"
+                        />
+                    </div>
+                    <div>
+                        <h2 className="font-extrabold text-2xl tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">
+                            SIArsip
+                        </h2>
+                        <p className="text-[10px] text-blue-200 font-semibold tracking-wide uppercase">
+                            Politeknik Piksi Input Serang
+                        </p>
+                    </div>
+                </div>
+
+                {/* Welcoming Content */}
+                <div className="relative z-10 my-auto max-w-lg">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30 mb-6">
+                        <ShieldCheck className="w-3.5 h-3.5" /> Sistem Terlindungi & Terintegrasi
+                    </span>
+                    <h1 className="text-4xl lg:text-5xl font-black leading-tight mb-4 tracking-tight">
+                        Arsip Digital dalam Genggaman Anda.
+                    </h1>
+                    <p className="text-gray-300 text-base leading-relaxed mb-8">
+                        Kelola dokumen, pelaporan, dan kategorisasi arsip kampus secara modern, cepat, dan aman dalam satu sistem informasi terpusat.
+                    </p>
+
+                    {/* Features list */}
+                    <div className="space-y-4">
+                        <div className="flex items-start gap-3">
+                            <div className="p-2 rounded-lg bg-white/5 border border-white/10 text-blue-300">
+                                <FileSpreadsheet className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-sm">Penyimpanan Terstruktur</h4>
+                                <p className="text-xs text-gray-400">Pengorganisasian berkas otomatis berdasarkan kategori akademik.</p>
+                            </div>
+                        </div>
+                        <div className="flex items-start gap-3">
+                            <div className="p-2 rounded-lg bg-white/5 border border-white/10 text-blue-300">
+                                <Search className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <h4 className="font-bold text-sm">Pencarian Instan</h4>
+                                <p className="text-xs text-gray-400">Temukan dokumen penting dalam hitungan detik dengan indeks cerdas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Footer */}
+                <div className="relative z-10 text-xs text-blue-300/60 border-t border-white/10 pt-6">
+                    &copy; {new Date().getFullYear()} Politeknik Piksi Input Serang. All rights reserved.
+                </div>
+            </div>
+
+            {/* Right Column: Form */}
+            <div className="w-full md:w-1/2 flex items-center justify-center p-6 sm:p-12 relative">
+                {/* Background decoration for small screens */}
+                <div className="absolute top-0 right-0 w-48 h-48 bg-blue-100 rounded-full blur-3xl opacity-40 dark:bg-blue-900/10"></div>
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-100 rounded-full blur-3xl opacity-40 dark:bg-indigo-900/10"></div>
+
+                <div className="w-full max-w-md relative z-10">
+                    {/* Header for small screens / mobile */}
+                    <div className="flex md:hidden flex-col items-center mb-8">
+                        <img 
+                            src="/images/logo-piksi.png" 
+                            alt="Logo Politeknik Piksi Input Serang" 
+                            className="h-16 w-16 object-contain mb-3 drop-shadow-md"
+                        />
+                        <h2 className="text-2xl font-black text-gray-900 dark:text-white">
+                            SIArsip Piksi
+                        </h2>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 text-center">
+                            Sistem Informasi Arsip Digital Kampus
+                        </p>
+                    </div>
+
+                    {/* Form header */}
+                    <div className="hidden md:block mb-8">
+                        <h2 className="text-3xl font-black text-gray-900 dark:text-white tracking-tight">
+                            Selamat Datang
+                        </h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                            Silakan masuk untuk mengakses dasbor arsip Anda.
+                        </p>
+                    </div>
+
+                    {status && (
+                        <div className="mb-6 p-4 rounded-lg bg-green-50 text-sm font-medium text-green-600 border border-green-200 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800/30">
+                            {status}
+                        </div>
+                    )}
+
+                    <form onSubmit={submit} className="space-y-5 bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl shadow-gray-100 dark:shadow-none border border-gray-100 dark:border-gray-800/60">
+                        <div>
+                            <InputLabel htmlFor="email" value="Alamat Email" className="text-gray-700 dark:text-gray-300 font-semibold" />
+
+                            <div className="mt-1 relative rounded-md shadow-sm">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
+                                    <Mail className="h-5 w-5" />
+                                </div>
+                                <TextInput
+                                    id="email"
+                                    type="email"
+                                    name="email"
+                                    value={data.email}
+                                    className="pl-10 block w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 transition-shadow duration-200 shadow-sm"
+                                    autoComplete="username"
+                                    isFocused={true}
+                                    placeholder="nama@piksi.ac.id"
+                                    onChange={(e) => setData('email', e.target.value)}
+                                />
+                            </div>
+
+                            <InputError message={errors.email} className="mt-1.5 text-xs" />
+                        </div>
+
+                        <div>
+                            <InputLabel htmlFor="password" value="Kata Sandi" className="text-gray-700 dark:text-gray-300 font-semibold" />
+
+                            <div className="mt-1 relative rounded-md shadow-sm">
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400 dark:text-gray-500">
+                                    <Lock className="h-5 w-5" />
+                                </div>
+                                <TextInput
+                                    id="password"
+                                    type="password"
+                                    name="password"
+                                    value={data.password}
+                                    className="pl-10 block w-full rounded-xl border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:border-indigo-500 focus:ring-indigo-500 transition-shadow duration-200 shadow-sm"
+                                    autoComplete="current-password"
+                                    placeholder="••••••••"
+                                    onChange={(e) => setData('password', e.target.value)}
+                                />
+                            </div>
+
+                            <InputError message={errors.password} className="mt-1.5 text-xs" />
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <label className="flex items-center select-none cursor-pointer">
+                                <Checkbox
+                                    name="remember"
+                                    checked={data.remember}
+                                    className="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800"
+                                    onChange={(e) =>
+                                        setData(
+                                            'remember',
+                                            (e.target.checked || false) as false,
+                                        )
+                                    }
+                                />
+                                <span className="ms-2 text-sm text-gray-600 dark:text-gray-400">
+                                    Ingat saya
+                                </span>
+                            </label>
+
+                            {canResetPassword && (
+                                <Link
+                                    href={route('password.request')}
+                                    className="text-sm font-semibold text-indigo-600 hover:text-indigo-500 hover:underline focus:outline-none dark:text-indigo-400 dark:hover:text-indigo-300"
+                                >
+                                    Lupa sandi?
+                                </Link>
+                            )}
+                        </div>
+
+                        <div className="pt-2">
+                            <PrimaryButton className="w-full py-3 rounded-xl justify-center font-bold bg-indigo-600 hover:bg-indigo-500 shadow-md shadow-indigo-600/10 flex items-center gap-2" disabled={processing}>
+                                <LogIn className="w-4 h-4" /> Masuk ke Dasbor
+                            </PrimaryButton>
+                        </div>
+
+                        {/* Divider */}
+                        <div className="relative flex py-2 items-center">
+                            <div className="flex-grow border-t border-gray-200 dark:border-gray-800"></div>
+                            <span className="flex-shrink mx-4 text-gray-400 dark:text-gray-500 text-xs font-semibold uppercase">atau</span>
+                            <div className="flex-grow border-t border-gray-200 dark:border-gray-800"></div>
+                        </div>
+
+                        {/* Google Auth Button */}
+                        <div>
+                            <a
+                                href="/auth/google"
+                                className="flex w-full items-center justify-center gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-bold text-gray-700 shadow-sm hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:border-gray-700"
+                            >
+                                <svg className="h-5 w-5 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                                    <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                                    <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                                    <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                                </svg>
+                                Masuk dengan Google
+                            </a>
+                        </div>
+                    </form>
+
+                    <div className="mt-8 text-center">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                            Belum memiliki akun?{' '}
+                            <Link
+                                href={route('register')}
+                                className="font-bold text-indigo-600 hover:text-indigo-500 hover:underline dark:text-indigo-400 dark:hover:text-indigo-300"
+                            >
+                                Daftar Sekarang
+                            </Link>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
