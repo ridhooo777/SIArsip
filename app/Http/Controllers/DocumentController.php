@@ -13,6 +13,12 @@ class DocumentController extends Controller
 {
     public function index(Request $request)
     {
+        // Auto-update expired documents
+        Document::where('status', 'aktif')
+            ->whereNotNull('expired_at')
+            ->where('expired_at', '<', now()->toDateString())
+            ->update(['status' => 'non-aktif']);
+
         $query = Document::with('category');
 
         if ($request->filled('category_id')) {
@@ -20,7 +26,11 @@ class DocumentController extends Controller
         }
 
         if ($request->filled('status')) {
-            $query->where('status', $request->status);
+            $status = $request->status;
+            if ($status === 'nonaktif') {
+                $status = 'non-aktif';
+            }
+            $query->where('status', $status);
         }
 
         if ($request->filled('search')) {
@@ -65,6 +75,7 @@ class DocumentController extends Controller
             'category_id' => 'required|exists:categories,id',
             'reference_number' => 'nullable|string|max:255',
             'issuance_date' => 'nullable|date',
+            'expired_at' => 'nullable|date',
             'description' => 'nullable|string',
             'file' => 'required|file|mimes:pdf,jpg,jpeg,png,doc,docx,xls,xlsx,zip,rar|max:20480', // Max 20MB
         ]);
@@ -78,17 +89,26 @@ class DocumentController extends Controller
         $path = $file->store('archives', 'public');
         $fileUrl = Storage::disk('public')->url($path);
 
+        $status = 'aktif';
+        if ($request->filled('expired_at')) {
+            $today = now()->toDateString();
+            if ($today > $request->expired_at) {
+                $status = 'non-aktif';
+            }
+        }
+
         $document = Document::create([
             'reference_number' => $request->reference_number,
             'title' => $request->title,
             'category_id' => $request->category_id,
             'issuance_date' => $request->issuance_date ?? now()->toDateString(),
+            'expired_at' => $request->expired_at,
             'description' => $request->description,
             'file_url' => $fileUrl,
             'file_name' => $originalName,
             'file_type' => $fileType,
             'file_size' => $fileSize,
-            'status' => $request->status ?? 'aktif',
+            'status' => $status,
             'user_id' => $request->user()->id,
         ]);
 
@@ -111,6 +131,7 @@ class DocumentController extends Controller
             'category_id' => 'sometimes|required|exists:categories,id',
             'reference_number' => 'nullable|string|max:255',
             'issuance_date' => 'nullable|date',
+            'expired_at' => 'nullable|date',
             'description' => 'nullable|string',
             'status' => 'sometimes|required|string|in:aktif,non-aktif,ditangguhkan',
         ]);

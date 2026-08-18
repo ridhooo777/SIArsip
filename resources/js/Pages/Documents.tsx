@@ -12,6 +12,7 @@ import {
   X,
   FileIcon,
   Loader2,
+  XCircle,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Layout from '@/Layouts/Layout';
@@ -27,6 +28,7 @@ interface Document {
   title: string;
   category_id: number;
   issuance_date: string;
+  expired_at?: string | null;
   description: string | null;
   file_url: string | null;
   file_name: string | null;
@@ -97,6 +99,15 @@ export default function Documents({ documents, categories, filters }: DocumentsP
   const handleDelete = (doc: Document) => {
     if (!confirm(`Hapus arsip "${doc.title}"? Tindakan ini tidak dapat dibatalkan.`)) return;
     router.delete(`/documents/${doc.id}`);
+  };
+
+  const handleDeactivate = (doc: Document) => {
+    if (!confirm(`Nonaktifkan status arsip "${doc.title}" secara manual?`)) return;
+    router.put(`/documents/${doc.id}`, {
+      status: 'non-aktif',
+    }, {
+      preserveScroll: true,
+    });
   };
 
   const clearFilters = () => {
@@ -315,10 +326,10 @@ export default function Documents({ documents, categories, filters }: DocumentsP
                       <td className="px-5 py-4">
                         <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${
                           doc.status === 'aktif' ? 'bg-green-100 text-green-700' :
-                          doc.status === 'nonaktif' ? 'bg-red-100 text-red-700' :
+                          doc.status === 'nonaktif' || doc.status === 'non-aktif' ? 'bg-red-100 text-red-700' :
                           'bg-yellow-100 text-yellow-700'
                         }`}>
-                          {doc.status || 'aktif'}
+                          {doc.status === 'non-aktif' ? 'non-aktif' : (doc.status || 'aktif')}
                         </span>
                       </td>
                       <td className="px-5 py-4 text-right">
@@ -339,6 +350,15 @@ export default function Documents({ documents, categories, filters }: DocumentsP
                           >
                             <Eye size={16} />
                           </button>
+                          {doc.status === 'aktif' && (
+                            <button
+                              onClick={() => handleDeactivate(doc)}
+                              className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                              title="Nonaktifkan"
+                            >
+                              <XCircle size={16} />
+                            </button>
+                          )}
                           <button
                             onClick={() => handleDelete(doc)}
                             className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
@@ -454,6 +474,12 @@ export default function Documents({ documents, categories, filters }: DocumentsP
                     <p className="text-gray-500 text-xs mb-1">Diarsipkan</p>
                     <p className="font-medium text-gray-900">{formatDate(previewDoc.created_at)}</p>
                   </div>
+                  {previewDoc.expired_at && (
+                    <div>
+                      <p className="text-gray-500 text-xs mb-1">Tanggal Jatuh Tempo</p>
+                      <p className="font-medium text-gray-900">{formatDate(previewDoc.expired_at)}</p>
+                    </div>
+                  )}
                 </div>
 
                 {previewDoc.description && (

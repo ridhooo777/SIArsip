@@ -3,7 +3,7 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { FormEventHandler } from 'react';
 import { Mail, Lock, LogIn, ShieldCheck, FileSpreadsheet, Search } from 'lucide-react';
 
@@ -14,6 +14,7 @@ export default function Login({
     status?: string;
     canResetPassword: boolean;
 }) {
+    const { errors: pageErrors } = usePage().props;
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -137,6 +138,12 @@ export default function Login({
                         </div>
                     )}
 
+                    {pageErrors.email && (
+                        <div className="mb-6 p-4 rounded-lg bg-red-50 text-sm font-medium text-red-600 border border-red-200 dark:bg-red-950/20 dark:text-red-400 dark:border-red-800/30">
+                            {pageErrors.email}
+                        </div>
+                    )}
+
                     <form onSubmit={submit} className="space-y-5 bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-xl shadow-gray-100 dark:shadow-none border border-gray-100 dark:border-gray-800/60">
                         <div>
                             <InputLabel htmlFor="email" value="Alamat Email" className="text-gray-700 dark:text-gray-300 font-semibold" />
@@ -158,7 +165,7 @@ export default function Login({
                                 />
                             </div>
 
-                            <InputError message={errors.email} className="mt-1.5 text-xs" />
+                            <InputError message={errors.email || pageErrors.email} className="mt-1.5 text-xs" />
                         </div>
 
                         <div>

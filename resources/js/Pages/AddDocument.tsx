@@ -35,6 +35,7 @@ export default function AddDocument({ categories, errors }: AddDocumentProps) {
     title: '',
     category_id: '',
     issuance_date: new Date().toISOString().split('T')[0],
+    expired_at: '',
     description: '',
     status: 'aktif',
     file: null as File | null,
@@ -115,7 +116,7 @@ export default function AddDocument({ categories, errors }: AddDocumentProps) {
             Informasi Dokumen
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {/* Reference Number */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-1.5">
@@ -139,6 +140,19 @@ export default function AddDocument({ categories, errors }: AddDocumentProps) {
                 type="date"
                 value={data.issuance_date}
                 onChange={(e) => setData('issuance_date', e.target.value)}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
+              />
+            </div>
+
+            {/* Expired At */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5 flex items-center gap-1.5">
+                <Calendar size={14} /> Tanggal Jatuh Tempo
+              </label>
+              <input
+                type="date"
+                value={data.expired_at}
+                onChange={(e) => setData('expired_at', e.target.value)}
                 className="w-full px-4 py-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
               />
             </div>

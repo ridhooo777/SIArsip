@@ -1,0 +1,19 @@
+# Ignored folders/files for Vercel Deployment
+vendor/
+storage/
+bootstrap/cache/
+database/
+app/
+config/
+routes/
+tests/
+phpunit.xml
+artisan
+Siarsip.zip
+public-old/
+package-lock-old.json
+tsconfig-react.json
+package-react.json
+vite-react.config.ts
+.env
+.env.example

@@ -17,6 +17,7 @@ class Document extends Model
         'file_type',
         'file_size',
         'status',
+        'expired_at',
         'user_id',
     ];
 
