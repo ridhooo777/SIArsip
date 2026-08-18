@@ -1,14 +1,8 @@
-# Ignored folders/files for Vercel Deployment
-vendor/
-storage/
-bootstrap/cache/
-database/
-app/
-config/
-routes/
+# Ignored files for Vercel
+.git/
+node_modules/
 tests/
 phpunit.xml
-artisan
 Siarsip.zip
 public-old/
 package-lock-old.json
